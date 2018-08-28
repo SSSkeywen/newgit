@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no,email=no,adress=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <title>中国太平95589</title>
+    <link rel="stylesheet" href="./css/rest.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/1rem100px.js"></script>
+    <script src="./js/vue.min.js"></script>
+</head>
+<body>
+    <div id="bqContent">
+        <section class="bq-list-box" v-for="(item, index) in contentLists" :key="index">
+            <header class="bq-title">
+                <div class="bq-title-img" @click="selectBd(index)">
+                    <img src="./img/selectIconOne.svg" v-if="item.isSelect">
+                    <img src="./img/checked.png" v-else>
+                </div>
+                <article class="bq-title-font">
+                    <p>保单号：<span v-text="item.bdNo"></span></p>
+                </article>
+            </header>
+            <ul class="bq-content-list" v-for="(itemTwo,indexTwo) in item.listDatas" :key="indexTwo">
+                
+                <li>
+                    <p>险种名称</p>
+                    <p v-text="itemTwo.listName"></p>
+                </li>
+                <li>
+                    <p>是否分红</p>
+                    <p v-text="itemTwo.listXh"></p>
+                </li>
+                <li>
+                    <p>现红利选择方式</p>
+                    <p v-text="itemTwo.hlStyle"></p>
+                </li>
+                <li class=" line-down">
+                    <p>变更后红利选择方式</p>
+                    <div class="bq-select" @click="selectXh(index,indexTwo)">
+                        <p style="color:rgba(0,108,183,1);">{{ itemTwo.selectCount }}</p>
+                        <div class="select-style">
+                            <img src="./img/toRightIcon.png">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- <div class="bq-zh-list">
+                <ul v-for="(itemTwo, indexTwo) in item.newAddZh" :key="indexTwo">
+                    <li class="line-down">
+                        <p>账户<span v-text="indexTwo+1"></span></p>
+                        <div class="delect-style" @click="delectZh(index,indexTwo)">
+                            <img src="./img/delectIcon.png" alt="" srcset="">
+                        </div>
+                    </li>
+                    <li>
+                        <p>账户代码</p>
+                        <p v-text="itemTwo.zhCode"></p>
+                    </li>
+                    <li>
+                        <p>账户名称</p>
+                        <p v-text="itemTwo.zhName"></p>
+                    </li>
+                    <li>
+                        <p>现有基金单位总数</p>
+                        <p v-text="itemTwo.zhNmber"></p>
+                    </li>
+                    <li>
+                        <p>分配比例</p>
+                        <div class="bq-bl">
+                            <input type="text" v-model="itemTwo.zhBl">
+                            <p>%</p>
+                        </div>
+                    </li>
+                </ul>
+            </div> -->
+            
+        </section>
+        <!-- <section class="tips-list-style">
+            <header>温馨提示：</header>
+            <ul>
+                <li>
+                    <p>1.</p>
+                    <p>同一险种下各账户分配比例之和应为100%。</p>
+                </li>
+                <li>
+                    <p>2.</p>
+                    <p>变更投资比例仅对未来交费的保费进入投资账户的比例分配做调整，原投资组合比例购买的投资单位数不发生变动。</p>
+                </li>
+                <li>
+                    <p>3.</p>
+                    <p>智胜投连险种，每个保单年度内有三次免费变更机会，变更次数多于三次的，每次变更手续费50元。</p>
+                </li>
+            </ul>
+        </section> -->
+        <!-- <section class="bq-submit">
+            <div class="bq-submit-content">
+                <div class="bq-submit-left" @click="allSelect">
+                    <div>
+                        <img src="./img/selectIconOne.svg" v-if="selectAll">
+                        <img src="./img/checked.png" v-else>
+                    </div>
+                    <p>全选</p>
+                </div>
+                <div class="bq-submit-right style-click" @click="submitFn">
+                    <p>选择变更</p>
+                </div>
+            </div>
+        </section> -->
+        <section class="success-btn" @click="submitFn">
+            <button class="style-click">确认</button>
+        </section>
+        <transition name="fade">
+            <div class="tips-style" v-if="isShowTips">
+                <p v-text="tipsContent"></p>
+            </div>
+        </transition>
+        <section class="select-list" v-if="newAddZhList" @click="closeZh">
+            <div class="select-list-box" @click.stop>
+                <hgroup class="select-list-title">
+                    <div class="select-list-img" @click="closeZh">
+                        <img src="./img/houtui.png" alt="" srcset="">
+                    </div>
+                    <p>变更后红利选择方式</p>
+                    <p>&nbsp;</p>
+                </hgroup>
+                <ul class="select-list-content">
+                    <li class="line-down style-click" @click="selectNewAddZh(index)" v-for="(item,index) in selectListData" :key="index">
+                        <p v-text="item.zhName"></p>
+                        <div>
+                            <img src="./img/selectIcon.png" v-if="item.isSelectCh">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="tips-two" v-if="isShowyesOrNo">
+            <div class="tips-content">
+                <div class="tips-font line-down">
+                    <p class="p-one">保单：006762144694003</p>
+                    <p class="p-two">红利选择方式未变更 请确认是否继续操作？</p>
+                </div>
+                <div class="tips-btn">
+                    <div class="line-right">
+                        <button class="style-click" @click="closeTipsFn">否</button>
+                    </div>
+                    <div>
+                        <button class="style-click" @click="submitFnTwo">是</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+            el: '#bqContent',
+            data: {
+                isShowTips: false,
+                selectAll: true,
+                tipsContent: '',
+                isShowyesOrNo: false,  //提交显示
+                newAddZhList: false, //新增账户是否显示
+                numOne: '',
+                numTwo: '',
+                selectListData: [
+                    {
+                        zhName:'累积生息',
+                        isSelectCh: false,
+                    }, {
+                        zhName: '抵交保费',
+                        isSelectCh: false,
+                    }, {
+                        zhName: '现金领取',
+                        isSelectCh: false,
+                    }
+                ],
+                contentLists: [
+                    {
+                        isSelect: true,
+                        bdNo: '006762144694003',
+                        listDatas: [
+                            {
+                                listName: '太平福禄康瑞终身重大疾病保险',
+                                listXh: 'Y',
+                                hlStyle: '现金领取',
+                                selectCount: '请选择'
+                            }, {
+                                listName: '太平福禄康瑞终身重大疾病保险',
+                                listXh: 'Y',
+                                hlStyle: '现金领取',
+                                selectCount: '请选择'
+                            }
+                        ],
+                    },
+                    {
+                        isSelect: true,
+                        bdNo: '006762144694003',
+                        listDatas: [
+                            {
+                                listName: '太平福禄康瑞终身重大疾病保险',
+                                listXh: 'Y',
+                                hlStyle: '现金领取',
+                                selectCount: '请选择'
+                            }, {
+                                listName: '太平福禄康瑞终身重大疾病保险',
+                                listXh: 'Y',
+                                hlStyle: '现金领取',
+                                selectCount: '请选择'
+                            }
+                        ],
+                    }
+                ]
+            },
+            methods: {
+                //Toast方法
+                showTipsFn() {
+                    this.isShowTips = true;
+                    setTimeout(() => {
+                        this.isShowTips = false
+                    }, 1000)
+                },
+                submitFn(){
+                    for (let item of this.contentLists) {
+                        console.log(item.isSelect)
+                        // item.isSelect = false
+                        if (item.isSelect) {
+                            this.tipsContent = '保单红利选择方式未变更，请确认'
+                            this.showTipsFn()
+                            return false
+                        }
+                    }
+                    this.isShowyesOrNo = true
+                    // window.location.href='./successPage.html'
+                },
+                submitFnTwo(){
+                    window.location.href = './successPage.html'
+                },
+                closeTipsFn(){
+                    this.isShowyesOrNo = false
+                },
+                //选择保单号
+                selectBd(index){
+                    this.contentLists[index].isSelect = !this.contentLists[index].isSelect
+                },
+                //新增账户
+                selectXh(index, indexTwo){
+                    console.log(index, indexTwo)
+                    this.numOne = index;
+                    this.numTwo = indexTwo
+                    for (let item of this.selectListData) {
+                        item.isSelectCh = false
+                    }
+                     this.contentLists[this.numOne].listDatas[this.numTwo].selectCount = '请选择'
+                    this.newAddZhList = true
+                },
+                //关闭新增账户
+                closeZh(){
+                    this.newAddZhList = false
+                },
+                //新增账户的方法
+                selectNewAddZh(index){
+                    console.log(this.selectListData[index].zhName)
+                    for(let item of this.selectListData){
+                        item.isSelectCh = false
+                    }
+                    this.selectListData[index].isSelectCh = true
+                    this.contentLists[this.numOne].listDatas[this.numTwo].selectCount = this.selectListData[index].zhName
+                    this.newAddZhList = false
+                },
+                //删除新增的账户方法
+                // delectZh(index, indexTwo){
+                //     console.log(index, indexTwo)
+                    
+                //     console.log(this.contentLists[index].newAddZh[indexTwo])
+                // }
+            }
+        })
+</script>
+<script>
+    (function () {
+        if (window.BOOMR && window.BOOMR.version) { return; }
+        var dom, doc, where, iframe = document.createElement('iframe'), win = window;
+
+        function boomerangSaveLoadTime(e) {
+            win.BOOMR_onload = (e && e.timeStamp) || new Date().getTime();
+        }
+        if (win.addEventListener) {
+            win.addEventListener("load", boomerangSaveLoadTime, false);
+        } else if (win.attachEvent) {
+            win.attachEvent("onload", boomerangSaveLoadTime);
+        }
+
+        iframe.src = "javascript:false";
+        iframe.title = ""; iframe.role = "presentation";
+        (iframe.frameElement || iframe).style.cssText = "width:0;height:0;border:0;display:none;";
+        where = document.getElementsByTagName('script')[0];
+        where.parentNode.insertBefore(iframe, where);
+
+        try {
+            doc = iframe.contentWindow.document;
+        } catch (e) {
+            dom = document.domain;
+            iframe.src = "javascript:var d=document.open();d.domain='" + dom + "';void(0);";
+            doc = iframe.contentWindow.document;
+        }
+        doc.open()._l = function () {
+            var js = this.createElement("script");
+            if (dom) this.domain = dom;
+            js.id = "boomr-if-as";
+            js.src = '//c.go-mpulse.net/boomerang/' +
+                '69ZP8-R47KK-V6XCQ-5HV8P-X3EQF';
+            BOOMR_lstart = new Date().getTime();
+            this.body.appendChild(js);
+        };
+        doc.write('<body onload="document._l();">');
+        doc.close();
+    })();
+</script>
+</html>

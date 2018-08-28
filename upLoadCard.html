@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no,email=no,adress=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <title>中国太平95589</title>
+    <link rel="stylesheet" href="./css/rest.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/1rem100px.js"></script>
+    <script src="./js/vue.min.js"></script>
+    <style>
+        .end-box ul li p button.btnStyle{border:1px solid rgba(153,153,153,1);color:rgba(153,153,153,1);}
+    </style>
+</head>
+<body>
+    <div id="bqContent">
+        <!-- <header class="bq-title">您名下支持申请结束保险费假期的保单列表</header> -->
+        <section class="uc-box">
+            <div class="uc-img">
+                <img src="./img/cardOne.png" width="100%">
+            </div>
+            <div class="uc-img">
+                <img src="./img/cardTwo.png" width="100%">
+            </div>
+            <p class="uc-font">上传证件照片要求</p>
+            <div class="uc-img-list">
+                <img src="./img/cardList.png" width="100%">
+            </div>
+            <p class="uc-tips">证件识别结果<span>（注：请确认证件识别结果准确后，再点击【确认变 更】按钮，变更身份证有效期）</span></p>
+        </section>
+        <section class="bq-box-style end-box">
+            <ul v-for="(item, index) in contentList">
+                <li>
+                    <p>姓名</p>
+                    <p v-text="item.bdContent"></p>
+                </li>
+                <li>
+                    <p>证件号码</p>
+                    <p v-text="item.cardNo"></p>
+                </li>
+                <li>
+                    <p>证件有效期</p>
+                    <p v-text="item.enterTime"></p>
+                </li>
+                <li class="line">
+                    <p>&nbsp;</p>
+                    <div class="uc-btn-list">
+                        <p @click="bgFn(index)">
+                            <button class="style-click">开始识别</button>
+                        </p>
+                        <p @click="bgFn(index)">
+                            <button :class="item.btnStyle" class="style-click">选择变更</button>
+                        </p>
+                    </div>
+                    
+                </li>
+            </ul>
+        </section>
+        <transition name="fade">
+        <div class="tips-style" v-if="isShowTips">
+            <p v-text="tipsContent"></p>
+        </div>
+        </transition>
+        <!-- <section class="error-style" v-show="isShowError" style="display: none;">
+            <div class="error-content">
+                <img src="./img/xitongyichang.png" width="100%">
+                <p class="error-font">系统异常，请刷新重试</p>
+                <div class="error-btn">
+                    <button class="style-click">刷新</button>
+                </div>
+            </div>
+        </section> -->
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+            el: '#bqContent',
+            data: {
+                selectAll: true,
+                isShowTips: false,
+                isShowError: true,
+                contentList: [ {
+                        selectTrue: true,
+                        bdContent: '张三',
+                        cardNo: '340826********6207',
+                        enterTime: '至2029-01-01',
+                        btnStyle:'btnStyle'
+                    }
+                ],
+                tipsContent: '对不起，请选择保单做变更投资分配比例'
+            },
+            methods: {
+                bgFn(index){
+                    console.log(this.contentList[index])
+                    // window.location.href = './endbxPageTwo.html'
+                },
+                showTipsFn(){
+                    this.isShowTips = true;
+                    setTimeout(()=>{
+                        this.isShowTips = false
+                    },3000)
+                },
+            }
+        })
+</script>
+<script>
+    (function () {
+        if (window.BOOMR && window.BOOMR.version) { return; }
+        var dom, doc, where, iframe = document.createElement('iframe'), win = window;
+
+        function boomerangSaveLoadTime(e) {
+            win.BOOMR_onload = (e && e.timeStamp) || new Date().getTime();
+        }
+        if (win.addEventListener) {
+            win.addEventListener("load", boomerangSaveLoadTime, false);
+        } else if (win.attachEvent) {
+            win.attachEvent("onload", boomerangSaveLoadTime);
+        }
+
+        iframe.src = "javascript:false";
+        iframe.title = ""; iframe.role = "presentation";
+        (iframe.frameElement || iframe).style.cssText = "width:0;height:0;border:0;display:none;";
+        where = document.getElementsByTagName('script')[0];
+        where.parentNode.insertBefore(iframe, where);
+
+        try {
+            doc = iframe.contentWindow.document;
+        } catch (e) {
+            dom = document.domain;
+            iframe.src = "javascript:var d=document.open();d.domain='" + dom + "';void(0);";
+            doc = iframe.contentWindow.document;
+        }
+        doc.open()._l = function () {
+            var js = this.createElement("script");
+            if (dom) this.domain = dom;
+            js.id = "boomr-if-as";
+            js.src = '//c.go-mpulse.net/boomerang/' +
+                '69ZP8-R47KK-V6XCQ-5HV8P-X3EQF';
+            BOOMR_lstart = new Date().getTime();
+            this.body.appendChild(js);
+        };
+        doc.write('<body onload="document._l();">');
+        doc.close();
+    })();
+</script>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no,email=no,adress=no" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <title>中国太平95589</title>
+    <link rel="stylesheet" href="./css/rest.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/1rem100px.js"></script>
+    <script src="./js/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="successPage">
+        <header class="bq-title">保单账户余额退费</header>
+        <section class="bq-list-box end-box-two">
+            <!-- <header class="bq-title">
+                <article class="bq-title-font">
+                    <p>保单号：
+                        <span v-text="POLICY_CODE"></span>
+                    </p>
+                </article>
+            </header> -->
+            <!-- <section class="success-list">
+                <ul v-for="(item,index) in dataList" :key="index">
+                    <li>
+                        <p>险种序号</p>
+                        <p v-text="item.INTERNAL_ID"></p>
+                    </li>
+                    <li>
+                        <p>险种名称</p>
+                        <p v-text="item.PRODUCT_NAME"></p>
+                    </li>
+                    <li>
+                        <p>进入假期时间</p>
+                        <p v-text="item.HOLIDAY_START_DATE"></p>
+                    </li>
+                    <li class="line-down">
+                        <p>应补金额合计</p>
+                        <p><span v-text="item.PERIOD_PREM"></span>&nbsp;元</p>
+                    </li>
+                </ul>
+            </section> -->
+            <!-- <div class="end-min-title">
+                <div class="end-shu"></div>
+                <p>结束保险费假期收费账号信息</p>
+            </div> -->
+            <section class="success-list">
+                <ul>
+                    <li>
+                        <p>账户所属银行</p>
+                        <p v-text="dataTwoList.BANK_CODE"></p>
+                    </li>
+                    <li>
+                        <p>账户类型</p>
+                        <p v-text="dataTwoList.ACCOUNT_TYPE"></p>
+                    </li>
+                    <li>
+                        <p>账户所属机构</p>
+                        <p v-text="dataTwoList.ORGAN_ID"></p>
+                    </li>
+                    <li>
+                        <p>收费账号</p>
+                        <p v-text="dataTwoList.BANK_ACCOUNT"></p>
+                    </li>
+                    <li>
+                        <p>账户所有人</p>
+                        <p v-text="dataTwoList.ACCO_OWNER_NAME"></p>
+                    </li>
+                    
+                    <!-- <li>
+                        <p>银行预留手机号</p>
+                        <div class="bank-phone-no">
+                            <input type="tel" v-model="dataTwoList.phoneNo">
+                        </div>
+                    </li> -->
+                    <!-- <li>
+                        <p>证件类型</p>
+                        <p v-text="dataTwoList.cardStyle"></p>
+                    </li> -->
+                    <!-- <li class="line-down">
+                        <p>证件号码</p>
+                        <p v-text="dataTwoList.cardNo"></p>
+                    </li> -->
+                </ul>
+            </section>
+        </section>
+        <section class="tips-list-style"  style="padding-bottom: 0rem;">
+            <header>温馨提示：</header>
+            <ul>
+                <li>
+                    <p></p>
+                    <p>给付账户为您的保险服务密码绑定账号</p>
+                </li>
+                <!-- <li>
+                    <p>2.</p>
+                    <p>账号所属机构为收费账号开卡地对应的太平人寿分公司。</p>
+                </li> -->
+            </ul>
+        </section>
+        <section class="success-btn" style="padding-top: 0.2rem;">
+            <button class="style-click" @click="submitFn">确认</button>
+        </section>
+        <transition name="fade">
+            <div class="tips-style" v-if="isShowTips">
+                <p v-text="tipsContent"></p>
+            </div>
+        </transition>
+        <!-- <section class="tips-two" v-if="isShowyesOrNo">
+            <div class="tips-content">
+                <div class="tips-font line-down">
+                    <p class="p-one">保单：006762144694003</p>
+                    <p class="p-two">红利选择方式未变更 请确认是否继续操作？</p>
+                </div>
+                <div class="tips-btn">
+                    <div class="line-right">
+                        <button class="style-click" @click="closeTipsFn">否</button>
+                    </div>
+                    <div>
+                        <button class="style-click" @click="submitFnTwo">是</button>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+        <section class="tips-two" v-if="isShowtipsThree">
+            <div class="tips-phone">
+                <header class="line-down">短信验证</header>
+                <div class="tips-number line-down">
+                    <div class="tips-phone-top">
+                        <div>
+                            <input v-model="sendCodeCount" type="text" placeholder="请输入验证码">
+                        </div>
+                        <div>
+                            <button class="style-click" :class="isDisabledSend? 'disable-style' : ''" @click="sendCode" :disabled="isDisabledSend">{{ sendCodeData }}</button>
+                        </div>
+                    </div>
+                    <p class="tips-phone-down">请在300秒内输入您收到的短信验证码，若未收到短信，请点击“重新发送验证码”。</p>
+                </div>
+                <div class="tips-phone-btn">
+                    <button class="style-click" @click="submitContent">确定</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#successPage',
+        data: {
+            sendCodeCount: '', //验证码
+            sendCodeData: '获取短信验证码',
+            isDisabledSend: false,
+            isShowTips: false,
+            isShowyesOrNo: false,
+            isShowtipsThree: false,
+            tipsContent: '对不起，银行预留手机号不能为空',
+            bdNo: '保单号',
+            POLICY_CODE: '006762144694003',
+            dataList: [{
+                INTERNAL_ID: '7289',
+                PRODUCT_NAME: '太平福禄康瑞终身重大疾病保险',
+                HOLIDAY_START_DATE: '2018/07/20',
+                PERIOD_PREM: '345',
+            }, {
+                INTERNAL_ID: '7289',
+                PRODUCT_NAME: '太平福禄康瑞终身重大疾病保险',
+                HOLIDAY_START_DATE: '2018/07/20',
+                PERIOD_PREM: '345',
+            }],
+            dataTwoList: {
+                BANK_CODE: '招商银行',
+                BANK_ACCOUNT: '6271 8892 2238 8901',
+                ACCOUNT_TYPE: '储蓄卡',
+                ACCO_OWNER_NAME: '王太平',
+                ORGAN_ID: '机构',
+                phoneNo: '13096120876',
+                cardStyle: '身份证',
+                cardNo: '3207*********36901',
+            },
+        },
+        methods: {
+            showTipsFn(tipsData) {
+                this.isShowTips = true;
+                this.tipsContent = tipsData
+                setTimeout(() => {
+                    this.isShowTips = false
+                }, 3000)
+            },
+            submitFn() {
+               if (this.dataTwoList.phoneNo == '') {
+                    this.showTipsFn('对不起，银行预留手机号不能为空')
+                    return false
+                }
+                this.isShowtipsThree = true
+            },
+            submitFnTwo() {
+                this.isShowtipsThree = true
+                // if (this.dataTwoList.phoneNo == '') {
+                //     this.showTipsFn('对不起，银行预留手机号不能为空')
+                //     return false
+                // }
+                // this.isShowtipsThree = true
+            },
+            closeTipsFn() {
+                this.isShowyesOrNo = false
+            },
+            //发送验证码
+            sendCode(){
+                
+                this.isDisabledSend = true
+                this.sendCodeData = '300秒后重新发送'
+                this.miuFnOne(300);
+
+                setTimeout(() => {
+                    this.sendCodeData = "重新发送";
+                    this.isDisabledSend = false;
+                }, 300000);
+            },
+            //验证码倒计时函数
+             miuFnOne(miu) {
+                let miuFn = setTimeout(() => {
+                    miu--;
+                    this.sendCodeData = miu + '秒后重新发送';
+                    if (miu == 1) {
+                        return false;
+                    }
+                    this.miuFnOne(miu);
+                }, 1000);
+            },
+            //提交方法
+            submitContent(){
+                console.log(this.sendCodeCount)
+                if(this.sendCodeCount == ''){
+                    this.showTipsFn('验证码不能为空！！！')
+                    return false
+                }
+                 window.location.href = './successPage.html'
+            }
+        }
+    })
+</script>
+<script>
+        (function () {
+            if (window.BOOMR && window.BOOMR.version) { return; }
+            var dom, doc, where, iframe = document.createElement('iframe'), win = window;
+
+            function boomerangSaveLoadTime(e) {
+                win.BOOMR_onload = (e && e.timeStamp) || new Date().getTime();
+            }
+            if (win.addEventListener) {
+                win.addEventListener("load", boomerangSaveLoadTime, false);
+            } else if (win.attachEvent) {
+                win.attachEvent("onload", boomerangSaveLoadTime);
+            }
+
+            iframe.src = "javascript:false";
+            iframe.title = ""; iframe.role = "presentation";
+            (iframe.frameElement || iframe).style.cssText = "width:0;height:0;border:0;display:none;";
+            where = document.getElementsByTagName('script')[0];
+            where.parentNode.insertBefore(iframe, where);
+
+            try {
+                doc = iframe.contentWindow.document;
+            } catch (e) {
+                dom = document.domain;
+                iframe.src = "javascript:var d=document.open();d.domain='" + dom + "';void(0);";
+                doc = iframe.contentWindow.document;
+            }
+            doc.open()._l = function () {
+                var js = this.createElement("script");
+                if (dom) this.domain = dom;
+                js.id = "boomr-if-as";
+                js.src = '//c.go-mpulse.net/boomerang/' +
+                    '69ZP8-R47KK-V6XCQ-5HV8P-X3EQF';
+                BOOMR_lstart = new Date().getTime();
+                this.body.appendChild(js);
+            };
+            doc.write('<body onload="document._l();">');
+            doc.close();
+        })();
+</script>
+
+</html>
