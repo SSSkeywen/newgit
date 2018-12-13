@@ -20,6 +20,7 @@
             <label>密码:</label>
             <input v-model="info.passw" placeholder="请输入密码" />
         </div>
+        <button @click="function1">3321321</button>
     </div>
 </body>
 <script>
@@ -40,6 +41,31 @@
                     // deep: true,
                 },
             },
+            methods:{
+                function2() {
+                    // 你的逻辑代码 
+                    console.log('function02')
+                    alert(11)
+                    return Promise.resolve(111)
+                    // return Promise.resolve(/* 这里是需要返回的数据*/)
+                },
+
+function3() {
+                    // 你的逻辑代码 
+                    console.log('function03')
+                    return Promise.resolve(/* 这里是需要返回的数据*/)
+                },
+
+// 调用
+function1() {
+                    this.function2().then(() => {
+                        // console.log(val)
+                        this.function3().then(() => {
+                            console.log('newFunction')
+                        })
+                    });
+                }
+            }
         })
 </script>
 <script>
